@@ -36,6 +36,8 @@ import org.apache.zookeeper.server.quorum.flexible.QuorumHierarchical;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class HierarchicalQuorumTest extends ClientBase {
     private static final Logger LOG = LoggerFactory.getLogger(QuorumBase.class);
 
@@ -129,22 +131,22 @@ public class HierarchicalQuorumTest extends ClientBase {
         int syncLimit = 3;
         HashMap<Long,QuorumServer> peers = new HashMap<Long,QuorumServer>();
         peers.put(Long.valueOf(1), new QuorumServer(1, 
-                new InetSocketAddress("127.0.0.1", port1 + 1000),
-                new InetSocketAddress("127.0.0.1", leport1 + 1000)));        
+                new QuorumServerAddress("127.0.0.1", port1 + 1000),
+                new QuorumServerAddress("127.0.0.1", leport1 + 1000)));
         peers.put(Long.valueOf(2), new QuorumServer(2, 
-                new InetSocketAddress("127.0.0.1", port2 + 1000),
-                new InetSocketAddress("127.0.0.1", leport2 + 1000)));
+                new QuorumServerAddress("127.0.0.1", port2 + 1000),
+                new QuorumServerAddress("127.0.0.1", leport2 + 1000)));
         peers.put(Long.valueOf(3), new QuorumServer(3, 
-                new InetSocketAddress("127.0.0.1", port3 + 1000),
-                new InetSocketAddress("127.0.0.1", leport3 + 1000)));
+                new QuorumServerAddress("127.0.0.1", port3 + 1000),
+                new QuorumServerAddress("127.0.0.1", leport3 + 1000)));
         peers.put(Long.valueOf(4), new QuorumServer(4,
-                new InetSocketAddress("127.0.0.1", port4 + 1000),
-                new InetSocketAddress("127.0.0.1", leport4 + 1000),
+                new QuorumServerAddress("127.0.0.1", port4 + 1000),
+                new QuorumServerAddress("127.0.0.1", leport4 + 1000),
                 withObservers ? QuorumPeer.LearnerType.OBSERVER
                         : QuorumPeer.LearnerType.PARTICIPANT));
         peers.put(Long.valueOf(5), new QuorumServer(5,
-                new InetSocketAddress("127.0.0.1", port5 + 1000),
-                new InetSocketAddress("127.0.0.1", leport5 + 1000),
+                new QuorumServerAddress("127.0.0.1", port5 + 1000),
+                new QuorumServerAddress("127.0.0.1", leport5 + 1000),
                 withObservers ? QuorumPeer.LearnerType.OBSERVER
                         : QuorumPeer.LearnerType.PARTICIPANT));
 

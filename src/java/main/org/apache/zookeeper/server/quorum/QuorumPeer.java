@@ -26,14 +26,17 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.zookeeper.common.AtomicFileOutputStream;
 import org.apache.zookeeper.jmx.MBeanRegistry;
@@ -92,34 +95,91 @@ public class QuorumPeer extends Thread implements QuorumStats.Provider {
     private ZKDatabase zkDb;
 
     public static class QuorumServer {
-        public QuorumServer(long id, InetSocketAddress addr,
-                InetSocketAddress electionAddr) {
+        public QuorumServer(long id, QuorumServerAddress addr,
+                QuorumServerAddress electionAddr) {
             this.id = id;
             this.addr = addr;
             this.electionAddr = electionAddr;
         }
 
-        public QuorumServer(long id, InetSocketAddress addr) {
+        public QuorumServer(long id, QuorumServerAddress addr) {
             this.id = id;
             this.addr = addr;
             this.electionAddr = null;
         }
         
-        public QuorumServer(long id, InetSocketAddress addr,
-                    InetSocketAddress electionAddr, LearnerType type) {
+        public QuorumServer(long id, QuorumServerAddress addr,
+                    QuorumServerAddress electionAddr, LearnerType type) {
             this.id = id;
             this.addr = addr;
             this.electionAddr = electionAddr;
             this.type = type;
         }
         
-        public InetSocketAddress addr;
+        public QuorumServerAddress addr;
 
-        public InetSocketAddress electionAddr;
+        public QuorumServerAddress electionAddr;
         
         public long id;
         
         public LearnerType type = LearnerType.PARTICIPANT;
+    }
+
+    public static class QuorumServerAddress {
+        private final String hostName;
+        private final int port;
+
+        public QuorumServerAddress(int port) {
+            this(new InetSocketAddress(port).getHostName(), port);
+        }
+
+        public QuorumServerAddress(String hostName, int port) {
+            this.hostName = hostName;
+            this.port = port;
+        }
+
+        public String getHostName() {
+            return hostName;
+        }
+
+        public int getPort() {
+            return port;
+        }
+
+        public InetAddress getAddress() {
+            try {
+                return InetAddress.getByName(hostName);
+            } catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        public InetSocketAddress getSocketAddress() {
+            return new InetSocketAddress(hostName, port);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s:%d", hostName, port);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            QuorumServerAddress that = (QuorumServerAddress) o;
+
+            return Objects.equals(this.hostName, that.hostName) &&
+                   Objects.equals(this.port, that.port);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(hostName, port);
+        }
     }
 
     public enum ServerState {
@@ -346,9 +406,9 @@ public class QuorumPeer extends Thread implements QuorumStats.Provider {
 
     DatagramSocket udpSocket;
 
-    private InetSocketAddress myQuorumAddr;
+    private QuorumServerAddress myQuorumAddr;
 
-    public InetSocketAddress getQuorumAddress(){
+    public QuorumServerAddress getQuorumAddress(){
         return myQuorumAddr;
     }
 

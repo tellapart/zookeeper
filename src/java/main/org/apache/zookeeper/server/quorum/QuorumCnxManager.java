@@ -39,6 +39,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 /**
  * This class implements a connection manager for leader election using TCP. It
  * maintains one connection for every pair of servers. The tricky part is to
@@ -164,7 +166,7 @@ public class QuorumCnxManager {
         }
         Socket sock = new Socket();
         setSockOpts(sock);
-        sock.connect(self.getVotingView().get(sid).electionAddr, cnxTO);
+        sock.connect(self.getVotingView().get(sid).electionAddr.getSocketAddress(), cnxTO);
         initiateConnection(sock, sid);
     }
     
@@ -337,7 +339,7 @@ public class QuorumCnxManager {
     
     synchronized void connectOne(long sid){
         if (senderWorkerMap.get(sid) == null){
-            InetSocketAddress electionAddr;
+            QuorumServerAddress electionAddr;
             if (self.quorumPeers.containsKey(sid)) {
                 electionAddr = self.quorumPeers.get(sid).electionAddr;
             } else {
@@ -351,7 +353,7 @@ public class QuorumCnxManager {
                 }
                 Socket sock = new Socket();
                 setSockOpts(sock);
-                sock.connect(self.getView().get(sid).electionAddr, cnxTO);
+                sock.connect(electionAddr.getSocketAddress(), cnxTO);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Connected to server " + sid);
                 }

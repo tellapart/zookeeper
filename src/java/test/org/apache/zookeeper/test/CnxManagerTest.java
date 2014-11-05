@@ -42,6 +42,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class CnxManagerTest extends ZKTestCase {
     protected static final Logger LOG = LoggerFactory.getLogger(FLENewEpochTest.class);
     protected static final int THRESHOLD = 4;
@@ -65,8 +67,8 @@ public class CnxManagerTest extends ZKTestCase {
             peerClientPort[i] = PortAssignment.unique();
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress(peerQuorumPort[i]),
-                    new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(peerQuorumPort[i]),
+                            new QuorumServerAddress(PortAssignment.unique())));
             peerTmpdir[i] = ClientBase.createTmpDir();
         }
     }
@@ -182,8 +184,8 @@ public class CnxManagerTest extends ZKTestCase {
             
         peers.put(Long.valueOf(2),
                 new QuorumServer(2,
-                        new InetSocketAddress(deadAddress, deadPort),
-                        new InetSocketAddress(deadAddress, PortAssignment.unique())));
+                        new QuorumServerAddress(deadAddress, deadPort),
+                        new QuorumServerAddress(deadAddress, PortAssignment.unique())));
         peerTmpdir[2] = ClientBase.createTmpDir();
     
         QuorumPeer peer = new QuorumPeer(peers, peerTmpdir[1], peerTmpdir[1], peerClientPort[1], 3, 1, 1000, 2, 2);
@@ -229,7 +231,7 @@ public class CnxManagerTest extends ZKTestCase {
         Thread.sleep(1000);
         
         SocketChannel sc = SocketChannel.open();
-        sc.socket().connect(peers.get(new Long(1)).electionAddr, 5000);
+        sc.socket().connect(peers.get(new Long(1)).electionAddr.getSocketAddress(), 5000);
         
         /*
          * Write id first then negative length.
@@ -283,7 +285,7 @@ public class CnxManagerTest extends ZKTestCase {
         Thread.sleep(1000);
         
         Socket sock = new Socket();
-        sock.connect(peers.get(new Long(1)).electionAddr, 5000);
+        sock.connect(peers.get(new Long(1)).electionAddr.getSocketAddress(), 5000);
         long begin = System.currentTimeMillis();
         // Read without sending data. Verify timeout.
         cnxManager.receiveConnection(sock);

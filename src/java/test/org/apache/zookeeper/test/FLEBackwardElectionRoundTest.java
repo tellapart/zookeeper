@@ -39,6 +39,8 @@ import org.junit.Test;
 
 import org.apache.zookeeper.test.FLETestUtils.LEThread;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class FLEBackwardElectionRoundTest extends ZKTestCase {
     protected static final Logger LOG = LoggerFactory.getLogger(FLELostMessageTest.class);
     
@@ -94,8 +96,8 @@ public class FLEBackwardElectionRoundTest extends ZKTestCase {
             int clientport = PortAssignment.unique();
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress(clientport),
-                            new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(clientport),
+                            new QuorumServerAddress(PortAssignment.unique())));
             tmpdir[i] = ClientBase.createTmpDir();
             port[i] = clientport;
         }

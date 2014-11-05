@@ -35,6 +35,8 @@ import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.junit.Ignore;
 import org.junit.runner.JUnitCore;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 @Ignore("No tests in this class.")
 public class BaseSysTest extends TestCase {
     private static int fakeBasePort = 33222;
@@ -145,7 +147,7 @@ public class BaseSysTest extends TestCase {
         qps = new QuorumPeer[count];
         qpsDirs = new File[count];
         for(int i = 1; i <= count; i++) {
-            peers.put(Long.valueOf(i), new QuorumServer(i, new InetSocketAddress("127.0.0.1", fakeBasePort + i)));
+            peers.put(Long.valueOf(i), new QuorumServer(i, new QuorumServerAddress("127.0.0.1", fakeBasePort + i)));
         }
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < count; i++) {

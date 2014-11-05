@@ -37,6 +37,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class FLELostMessageTest extends ZKTestCase {
     protected static final Logger LOG = LoggerFactory.getLogger(FLELostMessageTest.class);
 
@@ -71,8 +73,8 @@ public class FLELostMessageTest extends ZKTestCase {
             int clientport = PortAssignment.unique();
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress(clientport),
-                            new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(clientport),
+                            new QuorumServerAddress(PortAssignment.unique())));
             tmpdir[i] = ClientBase.createTmpDir();
             port[i] = clientport;
         }

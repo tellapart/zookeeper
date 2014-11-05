@@ -42,6 +42,8 @@ import org.apache.zookeeper.server.quorum.flexible.QuorumHierarchical;
 import org.apache.zookeeper.server.quorum.flexible.QuorumMaj;
 import org.apache.zookeeper.server.quorum.flexible.QuorumVerifier;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class QuorumPeerConfig {
     private static final Logger LOG = LoggerFactory.getLogger(QuorumPeerConfig.class);
 
@@ -179,17 +181,17 @@ public class QuorumPeerConfig {
                        + " does not have the form host:port or host:port:port " +
                        " or host:port:port:type");
                 }
-                InetSocketAddress addr = new InetSocketAddress(parts[0],
+                QuorumServerAddress addr = new QuorumServerAddress(parts[0],
                         Integer.parseInt(parts[1]));
                 if (parts.length == 2) {
                     servers.put(Long.valueOf(sid), new QuorumServer(sid, addr));
                 } else if (parts.length == 3) {
-                    InetSocketAddress electionAddr = new InetSocketAddress(
+                    QuorumServerAddress electionAddr = new QuorumServerAddress(
                             parts[0], Integer.parseInt(parts[2]));
                     servers.put(Long.valueOf(sid), new QuorumServer(sid, addr,
                             electionAddr));
                 } else if (parts.length == 4) {
-                    InetSocketAddress electionAddr = new InetSocketAddress(
+                    QuorumServerAddress electionAddr = new QuorumServerAddress(
                             parts[0], Integer.parseInt(parts[2]));
                     LearnerType type = LearnerType.PARTICIPANT;
                     if (parts[3].toLowerCase().equals("observer")) {

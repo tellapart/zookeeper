@@ -29,6 +29,8 @@ import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.util.SerializeUtils;
 import org.apache.zookeeper.txn.TxnHeader;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 /**
  * Observers are peers that do not take part in the atomic broadcast protocol.
  * Instead, they are informed of successful proposals by the Leader. Observers
@@ -63,7 +65,7 @@ public class Observer extends Learner{
         zk.registerJMX(new ObserverBean(this, zk), self.jmxLocalPeerBean);
 
         try {
-            InetSocketAddress addr = findLeader();
+            QuorumServerAddress addr = findLeader();
             LOG.info("Observing " + addr);
             try {
                 connectToLeader(addr);

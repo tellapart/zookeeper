@@ -39,6 +39,8 @@ import org.junit.Assert;
 
 import com.sun.management.UnixOperatingSystemMXBean;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 /**
  * Utility for quorum testing. Setups 2n+1 peers and allows to start/stop all
  * peers, particular peer, n peers etc.
@@ -102,8 +104,8 @@ public class QuorumUtil {
                 ps.clientPort = PortAssignment.unique();
                 peers.put(i, ps);
 
-                peersView.put(Long.valueOf(i), new QuorumServer(i, new InetSocketAddress(
-                        "127.0.0.1", ps.clientPort + 1000), new InetSocketAddress("127.0.0.1",
+                peersView.put(Long.valueOf(i), new QuorumServer(i, new QuorumServerAddress(
+                        "127.0.0.1", ps.clientPort + 1000), new QuorumServerAddress("127.0.0.1",
                         PortAssignment.unique() + 1000), LearnerType.PARTICIPANT));
                 hostPort += "127.0.0.1:" + ps.clientPort + ((i == ALL) ? "" : ",");
             }

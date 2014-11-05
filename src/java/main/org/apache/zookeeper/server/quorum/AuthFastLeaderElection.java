@@ -723,8 +723,7 @@ public class AuthFastLeaderElection implements Election {
             }
 
             for (QuorumServer server : self.getVotingView().values()) {
-                InetSocketAddress saddr = new InetSocketAddress(server.addr
-                        .getAddress(), port);
+                InetSocketAddress saddr = server.addr.getSocketAddress();
                 addrChallengeMap.put(saddr, new ConcurrentHashMap<Long, Long>());
             }
 
@@ -781,7 +780,7 @@ public class AuthFastLeaderElection implements Election {
             ToSend notmsg = new ToSend(ToSend.mType.notification,
                     AuthFastLeaderElection.sequencer++, proposedLeader,
                     proposedZxid, logicalclock, QuorumPeer.ServerState.LOOKING,
-                    self.getView().get(server.id).electionAddr);
+                    self.getView().get(server.id).electionAddr.getSocketAddress());
 
             sendqueue.offer(notmsg);
         }

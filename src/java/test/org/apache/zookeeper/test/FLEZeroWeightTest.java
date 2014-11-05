@@ -40,6 +40,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class FLEZeroWeightTest extends ZKTestCase {
     private static final Logger LOG = LoggerFactory.getLogger(HierarchicalQuorumTest.class);
 
@@ -154,8 +156,8 @@ public class FLEZeroWeightTest extends ZKTestCase {
         for(int i = 0; i < count; i++) {
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress(PortAssignment.unique()),
-                    new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(PortAssignment.unique()),
+                            new QuorumServerAddress(PortAssignment.unique())));
             tmpdir[i] = ClientBase.createTmpDir();
             port[i] = PortAssignment.unique();
         }
