@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class FLEPredicateTest extends ZKTestCase {
     
     protected static final Logger LOG = LoggerFactory.getLogger(FLEPredicateTest.class);
@@ -63,8 +65,8 @@ public class FLEPredicateTest extends ZKTestCase {
         for(int i = 0; i < 3; i++) {
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress(PortAssignment.unique()),
-                    new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(PortAssignment.unique()),
+                            new QuorumServerAddress(PortAssignment.unique())));
         }
 
         /*

@@ -39,6 +39,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class FLETest extends ZKTestCase {
     protected static final Logger LOG = LoggerFactory.getLogger(FLETest.class);
     private FLETest.LEThread leThread;
@@ -265,8 +267,8 @@ public class FLETest extends ZKTestCase {
         for(int i = 0; i < count; i++) {
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress(PortAssignment.unique()),
-                    new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(PortAssignment.unique()),
+                            new QuorumServerAddress(PortAssignment.unique())));
             tmpdir[i] = ClientBase.createTmpDir();
             port[i] = PortAssignment.unique();
         }
@@ -360,8 +362,8 @@ public class FLETest extends ZKTestCase {
         for(sid = 0; sid < 3; sid++) {
             peers.put(Long.valueOf(sid),
                     new QuorumServer(sid,
-                            new InetSocketAddress(PortAssignment.unique()),
-                    new InetSocketAddress(PortAssignment.unique())));
+                            new QuorumServerAddress(PortAssignment.unique()),
+                            new QuorumServerAddress(PortAssignment.unique())));
             tmpdir[sid] = ClientBase.createTmpDir();
             port[sid] = PortAssignment.unique();
         }

@@ -184,16 +184,17 @@ public class LeaderElection implements Election  {
                 requestPacket.setLength(4);
                 HashSet<Long> heardFrom = new HashSet<Long>();
                 for (QuorumServer server : self.getVotingView().values()) {
-                    LOG.info("Server address: " + server.addr);
+                    InetSocketAddress serverAddress = server.addr.getSocketAddress();
+                    LOG.info("Server address: " + serverAddress);
                     try {
-                        requestPacket.setSocketAddress(server.addr);
+                        requestPacket.setSocketAddress(serverAddress);
                     } catch (IllegalArgumentException e) {
                         // Sun doesn't include the address that causes this
                         // exception to be thrown, so we wrap the exception
                         // in order to capture this critical detail.
                         throw new IllegalArgumentException(
                                 "Unable to set socket address on packet, msg:"
-                                + e.getMessage() + " with addr:" + server.addr,
+                                + e.getMessage() + " with addr:" + serverAddress,
                                 e);
                     }
 

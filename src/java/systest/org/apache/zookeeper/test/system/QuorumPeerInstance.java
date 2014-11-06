@@ -34,6 +34,8 @@ import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.server.quorum.QuorumPeer;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 class QuorumPeerInstance implements Instance {
     final private static Logger LOG = LoggerFactory.getLogger(QuorumPeerInstance.class);
     private static final int syncLimit = 3;
@@ -155,7 +157,7 @@ class QuorumPeerInstance implements Instance {
             peers = new HashMap<Long,QuorumServer>();
             for(int i = 0; i < parts.length; i++) {
                 String subparts[] = parts[i].split(":");
-                peers.put(Long.valueOf(i), new QuorumServer(i, new InetSocketAddress(subparts[0], Integer.parseInt(subparts[1]))));
+                peers.put(Long.valueOf(i), new QuorumServer(i, new QuorumServerAddress(subparts[0], Integer.parseInt(subparts[1]))));
             }
             try {
                 if (LOG.isDebugEnabled()) {

@@ -49,6 +49,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class LENonTerminateTest extends ZKTestCase {
     public class MockLeaderElection extends LeaderElection {
         public MockLeaderElection(QuorumPeer self) {
@@ -98,16 +100,17 @@ public class LENonTerminateTest extends ZKTestCase {
                 for (QuorumServer server :
                     self.getVotingView().values())
                 {
-                    LOG.info("Server address: " + server.addr);
+                    InetSocketAddress serverAddress = server.addr.getSocketAddress();
+                    LOG.info("Server address: " + serverAddress);
                     try {
-                        requestPacket.setSocketAddress(server.addr);
+                        requestPacket.setSocketAddress(serverAddress);
                     } catch (IllegalArgumentException e) {
                         // Sun doesn't include the address that causes this
                         // exception to be thrown, so we wrap the exception
                         // in order to capture this critical detail.
                         throw new IllegalArgumentException(
                                 "Unable to set socket address on packet, msg:"
-                                + e.getMessage() + " with addr:" + server.addr,
+                                + e.getMessage() + " with addr:" + serverAddress,
                                 e);
                     }
 
@@ -300,8 +303,8 @@ public class LENonTerminateTest extends ZKTestCase {
             int clientport = PortAssignment.unique();
             peers.put(Long.valueOf(i),
                     new QuorumServer(i,
-                            new InetSocketAddress("127.0.0.1", clientport),
-                            new InetSocketAddress("127.0.0.1", PortAssignment.unique())));
+                            new QuorumServerAddress("127.0.0.1", clientport),
+                            new QuorumServerAddress("127.0.0.1", PortAssignment.unique())));
             tmpdir[i] = ClientBase.createTmpDir();
             port[i] = clientport;
         }

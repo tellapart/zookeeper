@@ -40,6 +40,8 @@ import org.junit.Test;
 
 import com.sun.management.UnixOperatingSystemMXBean;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
+
 public class QuorumBase extends ClientBase {
     private static final Logger LOG = LoggerFactory.getLogger(QuorumBase.class);
 
@@ -124,24 +126,24 @@ public class QuorumBase extends ClientBase {
         int syncLimit = 3;
         HashMap<Long,QuorumServer> peers = new HashMap<Long,QuorumServer>();
         peers.put(Long.valueOf(1), new QuorumServer(1, 
-                new InetSocketAddress("127.0.0.1", port1 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE1 + 1000),
+                new QuorumServerAddress("127.0.0.1", port1 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE1 + 1000),
                 LearnerType.PARTICIPANT));
         peers.put(Long.valueOf(2), new QuorumServer(2, 
-                new InetSocketAddress("127.0.0.1", port2 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE2 + 1000),
+                new QuorumServerAddress("127.0.0.1", port2 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE2 + 1000),
                 LearnerType.PARTICIPANT));
         peers.put(Long.valueOf(3), new QuorumServer(3, 
-                new InetSocketAddress("127.0.0.1", port3 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE3 + 1000),
+                new QuorumServerAddress("127.0.0.1", port3 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE3 + 1000),
                 LearnerType.PARTICIPANT));
         peers.put(Long.valueOf(4), new QuorumServer(4, 
-                new InetSocketAddress("127.0.0.1", port4 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE4 + 1000),
+                new QuorumServerAddress("127.0.0.1", port4 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE4 + 1000),
                 LearnerType.PARTICIPANT));
         peers.put(Long.valueOf(5), new QuorumServer(5, 
-                new InetSocketAddress("127.0.0.1", port5 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE5 + 1000),
+                new QuorumServerAddress("127.0.0.1", port5 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE5 + 1000),
                 LearnerType.PARTICIPANT));
         
         if (withObservers) {
@@ -238,24 +240,24 @@ public class QuorumBase extends ClientBase {
             peers = new HashMap<Long,QuorumServer>();
 
             peers.put(Long.valueOf(1), new QuorumServer(1, 
-                new InetSocketAddress("127.0.0.1", port1 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE1 + 1000),
+                new QuorumServerAddress("127.0.0.1", port1 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE1 + 1000),
                 LearnerType.PARTICIPANT));
             peers.put(Long.valueOf(2), new QuorumServer(2, 
-                new InetSocketAddress("127.0.0.1", port2 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE2 + 1000),
+                new QuorumServerAddress("127.0.0.1", port2 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE2 + 1000),
                 LearnerType.PARTICIPANT));
             peers.put(Long.valueOf(3), new QuorumServer(3, 
-                new InetSocketAddress("127.0.0.1", port3 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE3 + 1000),
+                new QuorumServerAddress("127.0.0.1", port3 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE3 + 1000),
                 LearnerType.PARTICIPANT));
             peers.put(Long.valueOf(4), new QuorumServer(4, 
-                new InetSocketAddress("127.0.0.1", port4 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE4 + 1000),
+                new QuorumServerAddress("127.0.0.1", port4 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE4 + 1000),
                 LearnerType.PARTICIPANT));
             peers.put(Long.valueOf(5), new QuorumServer(5, 
-                new InetSocketAddress("127.0.0.1", port5 + 1000),
-                new InetSocketAddress("127.0.0.1", portLE5 + 1000),
+                new QuorumServerAddress("127.0.0.1", port5 + 1000),
+                new QuorumServerAddress("127.0.0.1", portLE5 + 1000),
                 LearnerType.PARTICIPANT));
         }
         

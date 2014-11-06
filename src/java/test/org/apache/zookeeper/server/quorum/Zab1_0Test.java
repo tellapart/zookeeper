@@ -18,6 +18,7 @@
 
 package org.apache.zookeeper.server.quorum;
 
+import static org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServerAddress;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -964,13 +965,13 @@ public class Zab1_0Test {
             super(self, zk);
         }
 
-        InetSocketAddress leaderAddr;
+        QuorumServerAddress leaderAddr;
         public void setLeaderSocketAddress(InetSocketAddress addr) {
-            leaderAddr = addr;
+            leaderAddr = new QuorumServerAddress(addr.getHostName(), addr.getPort());
         }
         
         @Override
-        protected InetSocketAddress findLeader() {
+        protected QuorumServerAddress findLeader() {
             return leaderAddr;
         }
     }
@@ -991,8 +992,8 @@ public class Zab1_0Test {
         peer.initLimit = 2;
         peer.tickTime = 2000;
         peer.quorumPeers = new HashMap<Long, QuorumServer>();
-        peer.quorumPeers.put(1L, new QuorumServer(0, new InetSocketAddress(33221)));
-        peer.quorumPeers.put(1L, new QuorumServer(1, new InetSocketAddress(33223)));
+        peer.quorumPeers.put(1L, new QuorumServer(0, new QuorumServerAddress(33221)));
+        peer.quorumPeers.put(1L, new QuorumServer(1, new QuorumServerAddress(33223)));
         peer.setQuorumVerifier(new QuorumMaj(3));
         peer.setCnxnFactory(new NullServerCnxnFactory());
         File version2 = new File(tmpDir, "version-2");
