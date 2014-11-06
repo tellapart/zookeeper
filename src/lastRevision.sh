@@ -16,6 +16,6 @@
 
 # Find the current revision, store it in a file
 FILE=$1
-LASTREV=`svn info | grep '^Revision' | sed -e 's/Revision: *//'`
+LASTREV=`date '+%Y%m%d'`
 
 echo "lastRevision=${LASTREV}" > $FILE
